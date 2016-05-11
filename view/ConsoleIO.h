@@ -29,6 +29,8 @@ void getLineFromConsol(char*, char*);
 
 static int getLine (char*, char*, size_t);
 
+int numbersOnly(const char*);
+
 //Az első almenü kirajzolása
 void printSubMenu();
 

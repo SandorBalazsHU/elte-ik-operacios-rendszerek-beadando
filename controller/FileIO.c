@@ -27,6 +27,7 @@ struct Lines* readDatasFromTXTFile(char* fname)
         int j; for(j = 0; j < _tokenBufferSize-1; ++j) tokens[j] = malloc(sizeof(char)*50);
         int i = 0;
         char* token = strtok(lineBuffer, ",");
+        printf("------------%s",lineBuffer);
         while (token) {
             strcpy(tokens[i], token);
             token = strtok(NULL, ",");
@@ -34,17 +35,20 @@ struct Lines* readDatasFromTXTFile(char* fname)
         }
         if((lineBuffer[0] != '-') && (lineBuffer[1] != '-'))
         {
+            //printf("%s,%s\n",tokens[0], tokens[1]);
             theNewLine = newLine(tokens[0], tokens[1]);
             addLineToLines(returnLines, theNewLine);
         }
         else
         {
-            Passenger* newPass = newPassenger(tokens[1], tokens[3], tokens[2]);
+            //printf("%s,%s,%s,%s\n",tokens[0] ,tokens[1], tokens[2], tokens[3]);
+            Passenger* newPass = newPassenger(tokens[1], tokens[2], tokens[3]);
             addPassengerToLine(theNewLine,newPass);
         }
         for(j = 0; j < _tokenBufferSize-1; ++j) free(tokens[j]);
     } 
     fclose(f);
+    strcpy(returnLines->lineArray[returnLines->size-1]->passengerArray[returnLines->lineArray[returnLines->size-1]->size-1]->name,"00Trash");
     return returnLines;
 }
 
@@ -60,10 +64,16 @@ int writeLinesToTXTFile(Lines* lines, char* fname)
     int i, j;
     for(i = 0; i < lines->size; ++i)
     {
-        fprintf(f, "%s,%s\n", lines->lineArray[i]->destination, lines->lineArray[i]->startTime);
-        for(j = 0; j < lines->lineArray[i]->size; ++j)
+        if(strcmp(lines->lineArray[i]->destination,"00Trash"))
         {
-            fprintf(f, "--%s,%s,%s\n",lines->lineArray[i]->passengerArray[j]->name,lines->lineArray[i]->passengerArray[j]->date,lines->lineArray[j]->passengerArray[i]->phoneNum);
+            fprintf(f, "%s,%s\n", lines->lineArray[i]->destination, lines->lineArray[i]->startTime);
+            for(j = 0; j < lines->lineArray[i]->size; ++j)
+            {
+                if(strcmp(lines->lineArray[i]->passengerArray[j]->name,"00Trash"))
+                {
+                    fprintf(f, "--%s,%s,%s\n",lines->lineArray[i]->passengerArray[j]->name,lines->lineArray[i]->passengerArray[j]->date,lines->lineArray[i]->passengerArray[j]->phoneNum);
+                }
+            }
         }
     }
     fclose(f);

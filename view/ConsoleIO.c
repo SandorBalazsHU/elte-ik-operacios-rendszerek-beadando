@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 #include "../model/Lines.h"
 #include "../model/Line.h"
 #include "../model/Passenger.h"
@@ -120,8 +121,11 @@ void printLinesInTable(Lines* lines)
    for(i = 0; i < lines->size; ++i)
     {
         Line* line = getLineFromLinesById(lines, i);
-        printf("| %d, %s, %s \n", i+1, line->destination, line->startTime);
-        printf("+%s+%s+%s+\n",bigLine2,bigLine2,bigLine2);
+        if(strcmp(line->destination,"00Trash"))
+        {
+            printf("| %d, %s, %s \n", i+1, line->destination, line->startTime);
+            printf("+%s+%s+%s+\n",bigLine2,bigLine2,bigLine2);
+        }
     }
 }
 
@@ -247,6 +251,17 @@ char subMenu()
 	}
 	return selectedMenuPoint;
 }
+
+int numbersOnly(const char* s)
+{
+    while (*s) {
+        if (isdigit(*s++) == 0) return 0;
+    }
+
+    return 1;
+}
+
+
 
 /*
 void readFromConsole(char* text, char ender, char* label, int l)

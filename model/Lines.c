@@ -24,7 +24,7 @@ int addLineToLines(Lines* lines, Line* line)
 {
 	int i;
 	int insert = -1;
-	for(i = 0; i < lines->size; ++i)
+	/*for(i = 0; i < lines->size; ++i)
 	{
 		if(strcmp(lines->lineArray[i]->destination,line->destination) == 0 )
 		{
@@ -38,7 +38,7 @@ int addLineToLines(Lines* lines, Line* line)
 				break;
 			}
 		}
-	}
+	}*/
 	
 	if(lines->_realSize > lines->size)
 	{

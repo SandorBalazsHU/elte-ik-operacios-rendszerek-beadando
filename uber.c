@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "./model/Lines.h"
 #include "./model/Line.h"
 #include "./model/Passenger.h"
@@ -29,8 +30,28 @@ int main(int argc, char** argv)
         {
             clearScrean();
             printIntro();
-            getPassengerFromConsol();
-            printf("\n      \x1b[32m+\x1b[0m Az adatok felvetele sikeres volt!");
+            Passenger* newPass = getPassengerFromConsol();
+            char ids [256];
+            getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a valsztott ut sorszamat: ", ids);
+            if(numbersOnly(ids))
+            {
+                int id = atoi(ids);
+                if((id>0) && (id<lines->size+1))
+                {
+                    addPassengerToLine(getLineFromLinesById(lines,id-1), newPass);
+                    writeLinesToTXTFile(lines, "uber.txt");
+                    printf("\n      \x1b[32m+\x1b[0m Az adatok felvetele sikeres volt!");
+                }
+                else
+                {
+                    printf("\n      \x1b[31m+ Ilyen ut nem letezik!\x1b[0m \n");
+                }
+            }
+            else
+            {
+                printf("\n      \x1b[31m+ Ilyen ut nem letezik!\x1b[0m \n");
+            }
+            
             printf("\n      \x1b[32m+\x1b[0m Uss entert a fomenube valo visszatereshez!");
             clearInputBuffer();
         }

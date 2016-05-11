@@ -4,7 +4,7 @@
 #include "Passenger.h"
 
 //új utas létrehozása
-struct Passenger* newPassenger(char* inName, char* inPhoneNum, char* inDate)
+struct Passenger* newPassenger(char* inName, char* inDate, char* inPhoneNum)
 {
     Passenger* newPass = (struct Passenger*) malloc(sizeof (struct Passenger));
     strcpy(newPass->name, inName);
