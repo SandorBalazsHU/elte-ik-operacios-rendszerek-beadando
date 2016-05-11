@@ -70,7 +70,7 @@ int deletePassengerFromLine(Line* line, Passenger* passenger)
 }
 
 //Adott nevű utas keresése
-struct Passenger* getPassengerFromLine(Line* line, char* name)
+struct Passenger* getPassengerFromLineByName(Line* line, char* name)
 {
 	int i;
 	for(i = 0; i < line->size; ++i)
@@ -78,6 +78,12 @@ struct Passenger* getPassengerFromLine(Line* line, char* name)
 		if((strcmp(line->passengerArray[i]->name, name) == 0 )) return(line->passengerArray[i]);
 	}
 	return NULL;
+}
+
+//Adott ID-jú utas keresése
+struct Passenger* getPassengerFromLineByID(Line* line, int i)
+{
+    return line->passengerArray[i];
 }
 
 //A Line típus destruktora

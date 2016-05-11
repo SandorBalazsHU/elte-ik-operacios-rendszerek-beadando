@@ -144,6 +144,47 @@ Passenger* getPassengerFromConsol()
     return newPassenger(nev, tel, date);
 }
 
+void printLineInfo(Lines* lines,int id)
+{
+    printf("\n");
+    int i, position = (int) getConsoleWindowWidth();
+    
+    char bigLine[(position/2)-21+1];
+    char spacer[(position/2)-21+1];
+    bigLine[(position/2)-21+1] = '\0';
+    spacer[(position/2)-21+1] = '\0';
+    for(i = 0; i < (position/2)-21; ++i)
+    {
+        bigLine[i] = '-';
+        spacer[i] = ' ';
+    }
+
+    printf("+%s\x1b[32m-------------------------------------\x1b[0m%s+\n",bigLine,bigLine);
+    printf("|%s\x1b[32m       %s-ba/be induló járatunk     \x1b[0m%s|\n",spacer,lines->lineArray[id-1]->destination,spacer);
+    printf("+%s\x1b[32m-------------------------------------\x1b[0m%s+\n",bigLine,bigLine);
+    
+    char bigLine2[position-7+1];
+    bigLine2[position-7+1] = '\0';
+    for(i = 0; i < position-7; ++i)
+    {
+        bigLine2[i] = '-';
+    }
+    printf("+%s+\n",bigLine2);
+    Line* line = getLineFromLinesById(lines, id);
+    for(i = 0; i < line->size; ++i)
+     {
+        Passenger* pass = getPassengerFromLineByID(line,i);
+        if(strcmp(pass->name,"00Trash"))
+        {
+            printf("\x1b[32m+\x1b[0m ID: %d \n", i);
+            printf("\x1b[32m+\x1b[0m Uticel: %s \n", line->destination);
+            printf("\x1b[32m+\x1b[0m Utas Neve: %s \n", pass->name);
+            printf("\x1b[32m+\x1b[0m Jelentkezes datuma: %s \n", pass->date);
+            printf("\x1b[32m+\x1b[0m Utas telefonszama: %s \n", pass->phoneNum);
+            printf("+%s+\n",bigLine2);
+        }
+     }
+}
 
 Line* getLineFromConsol()
 {

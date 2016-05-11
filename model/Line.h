@@ -64,7 +64,10 @@ int addPassengerToLine(Line*, Passenger*);
 int deletePassengerFromLine(Line*, Passenger*);
 
 //Adott nevű utas keresése
-struct Passenger* getPassengerFromLine(Line*, char*);
+struct Passenger* getPassengerFromLineByName(Line*, char*);
+
+//Adott ID-jú utas keresése
+struct Passenger* getPassengerFromLineByID(Line*, int);
 
 //A Line típus destruktora
 /*	Kell destrukfor, mivel a passengerArray külön álló egységet képez a memóriában*/

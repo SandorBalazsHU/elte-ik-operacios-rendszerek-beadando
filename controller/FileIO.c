@@ -47,7 +47,7 @@ struct Lines* readDatasFromTXTFile(char* fname)
         for(j = 0; j < _tokenBufferSize-1; ++j) free(tokens[j]);
     } 
     fclose(f);
-    strcpy(returnLines->lineArray[returnLines->size-1]->passengerArray[returnLines->lineArray[returnLines->size-1]->size-1]->name,"00Trash");
+    if(returnLines->lineArray[returnLines->size-1]->size > 0) strcpy(returnLines->lineArray[returnLines->size-1]->passengerArray[returnLines->lineArray[returnLines->size-1]->size-1]->name,"00Trash");
     return returnLines;
 }
 

@@ -35,6 +35,8 @@ int numbersOnly(const char*);
 
 Line* getLineFromConsol();
 
+void printLineInfo(Lines*,int);
+
 //Az első almenü kirajzolása
 void printSubMenu();
 
