@@ -27,7 +27,6 @@ struct Lines* readDatasFromTXTFile(char* fname)
         int j; for(j = 0; j < _tokenBufferSize-1; ++j) tokens[j] = malloc(sizeof(char)*50);
         int i = 0;
         char* token = strtok(lineBuffer, ",");
-        printf("------------%s",lineBuffer);
         while (token) {
             strcpy(tokens[i], token);
             token = strtok(NULL, ",");

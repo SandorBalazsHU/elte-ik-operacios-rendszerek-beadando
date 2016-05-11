@@ -134,9 +134,9 @@ Passenger* getPassengerFromConsol()
     printf("      \x1b[32m+\x1b[0m Kerem toltse ki az alabbi urlapot az utazasra valo jelentkezeshez:\n");
     clearInputBuffer();
     char nev [256];
-    getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a teljes nevet: ", nev);
+    getRowFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a teljes nevet: ", nev);
     char tel [256];
-    getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a telefonszamat: ",tel);
+    getRowFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a telefonszamat: ",tel);
     char date [256];
     getDate(date);
     printf("      \x1b[32m+\x1b[0m A datum: %s \n",date);
@@ -144,7 +144,20 @@ Passenger* getPassengerFromConsol()
     return newPassenger(nev, tel, date);
 }
 
-void getLineFromConsol(char* text, char* str)
+
+Line* getLineFromConsol()
+{
+    printf("      \x1b[32m+\x1b[0m Kerem toltse ki az alabbi urlapot uj jarat letrehozasahoz:\n");
+    clearInputBuffer();
+    char dest [256];
+    getRowFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg az uticélt: ", dest);
+    char date [256];
+    getRowFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg az indulás idejét (yyyy-MM-dd-hh:mm): ",date);
+    
+    return newLine(dest, date);
+}
+
+void getRowFromConsol(char* text, char* str)
 {
 
     char buff[256];
@@ -228,15 +241,24 @@ void getDate(char* date){
 //Az első almenü kirajzolása
 void printSubMenu()
 {
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m1.)\x1b[0m | Utak kezelése   | \n");
-	printf("          +-----------------+ \n");
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m2.)\x1b[0m | Utasok kezelése | \n");
-	printf("          +-----------------+ \n");
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m3.)\x1b[0m | Vissza          | \n");
-	printf("          +-----------------+ \n");
+	printf("          +--------------------+ \n");
+	printf("      \x1b[32m1.)\x1b[0m | Járat hozzáadása   | \n");
+	printf("          +--------------------+ \n");
+	printf("          +--------------------+ \n");
+	printf("      \x1b[32m2.)\x1b[0m | járat törlése      | \n");
+	printf("          +--------------------+ \n");
+	printf("          +--------------------+ \n");
+	printf("      \x1b[32m3.)\x1b[0m | Járat információk  | \n");
+	printf("          +--------------------+ \n");
+        printf("          +--------------------+ \n");
+	printf("      \x1b[32m4.)\x1b[0m | Utas törlése       | \n");
+	printf("          +--------------------+ \n");
+	printf("          +--------------------+ \n");
+	printf("      \x1b[32m5.)\x1b[0m | Utas módosítása    | \n");
+	printf("          +--------------------+ \n");
+	printf("          +--------------------+ \n");
+	printf("      \x1b[32m6.)\x1b[0m | Vissza             | \n");
+	printf("          +--------------------+ \n");
 	printf("      \x1b[32m+\x1b[0m Valassz funkciot: ");
 }
 
@@ -244,7 +266,7 @@ void printSubMenu()
 char subMenu()
 {
 	char selectedMenuPoint = ' ';
-	while( !((selectedMenuPoint == '1') || (selectedMenuPoint == '2') || (selectedMenuPoint == '3') || (selectedMenuPoint == '4')) )
+	while( !((selectedMenuPoint == '1') || (selectedMenuPoint == '2') || (selectedMenuPoint == '3') || (selectedMenuPoint == '4') || (selectedMenuPoint == '5') || (selectedMenuPoint == '6')) )
 	{
 		if ((selectedMenuPoint != ' ') && ( selectedMenuPoint != '\n')) printf("      \x1b[32m+\x1b[0m Hibas ertek! Add meg újra: ");
 		selectedMenuPoint = getchar();

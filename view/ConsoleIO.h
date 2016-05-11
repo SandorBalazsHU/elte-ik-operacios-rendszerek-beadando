@@ -3,6 +3,8 @@
 
 #include "../model/Passenger.h"
 #include "../model/Lines.h"
+#include "../model/Line.h"
+#include "../model/Passenger.h"
 
 //Kiírja a saját dátum reprezentációt a képernyőre
 void dateOut(int);
@@ -25,11 +27,13 @@ void clearInputBuffer();
 
 void getDate(char*);
 
-void getLineFromConsol(char*, char*);
+void getRowFromConsol(char*, char*);
 
 static int getLine (char*, char*, size_t);
 
 int numbersOnly(const char*);
+
+Line* getLineFromConsol();
 
 //Az első almenü kirajzolása
 void printSubMenu();

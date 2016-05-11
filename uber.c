@@ -20,7 +20,6 @@ int main(int argc, char** argv)
     }
 
     printLinesInTable(lines);
-
     printMainMenu();
 
     char slected;
@@ -32,7 +31,7 @@ int main(int argc, char** argv)
             printIntro();
             Passenger* newPass = getPassengerFromConsol();
             char ids [256];
-            getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a valsztott ut sorszamat: ", ids);
+            getRowFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a valsztott ut sorszamat: ", ids);
             if(numbersOnly(ids))
             {
                 int id = atoi(ids);
@@ -59,13 +58,37 @@ int main(int argc, char** argv)
         {
             clearScrean();
             printIntro();
+            printLinesInTable(lines);
             printSubMenu();
-            while((slected = subMenu()) != '3')
+            while((slected = subMenu()) != '6')
             {
                 if(slected == '1')
                 {
+                    clearScrean();
+                    printIntro();
+                    Line* newLine = getLineFromConsol();
+                    if(addLineToLines(lines, newLine) != -1)
+                    {
+                        writeLinesToTXTFile(lines, "uber.txt");
+                        printf("\n      \x1b[32m+\x1b[0m Az adatok felvetele sikeres volt!");
+                    }
+                    else
+                    {
+                        printf("\n      \x1b[31m+ IEnnél a dátumnál van közelebbi!\x1b[0m \n");
+                    }
+                    printf("\n      \x1b[32m+\x1b[0m Uss entert a fomenube valo visszatereshez!");
+                    clearInputBuffer();
                 }
                 if(slected == '2')
+                {
+                }
+                if(slected == '3')
+                {
+                }
+                if(slected == '4')
+                {
+                }
+                if(slected == '5')
                 {
                 }
             }
