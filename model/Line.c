@@ -5,14 +5,16 @@
 #include "Passenger.h"
 
 //Új üres járat létrehozásához
-struct Line* newLine()
+struct Line* newLine(char* destination, char* startTime)
 {
-	struct Line* this = malloc(sizeof(struct Line));
-	this -> size = 0;
-	this -> _realSize = _lineDefaultArraySize;
-	Passenger**  mallocPassengerArray = malloc(this -> _realSize * sizeof(Passenger*));
-	this -> passengerArray = mallocPassengerArray;
-	return this;
+	struct Line* _this = malloc(sizeof(struct Line));
+        strcpy(_this -> destination, destination);
+        strcpy(_this -> startTime, startTime);
+	_this -> size = 0;
+	_this -> _realSize = _lineDefaultArraySize;
+	Passenger**  mallocPassengerArray = malloc(_this -> _realSize * sizeof(Passenger*));
+	_this -> passengerArray = mallocPassengerArray;
+	return _this;
 }
 
 //Utas hozzáadását teszi lehetőve egy járathoz

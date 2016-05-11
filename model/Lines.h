@@ -53,8 +53,11 @@ int addLineToLines(Lines*, Line*);
 //Járat törlése a járatlistából
 int deleteLineFromLines(Lines*, Line*);
 
-//Célállomás szerinti keresés
-struct Line* getLineFromLines(Lines*, char*);
+//Célállomás szerinti keresés NULL-al tér vissza, ha nincs ilyen.
+struct Line* getLineFromLinesByDestination(Lines*, char*);
+
+//Index szerinti keresés
+struct Line* getLineFromLinesById(Lines*, int);
 
 //A Lines típus destruktora
 /*	Kell destrukfor, mivel a lineArray külön álló egységet képez a memóriában*/

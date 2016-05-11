@@ -13,4 +13,6 @@ struct Lines* readDatasFromTXTFile(char*);
 //Képes TXT fájlba írni egy Lines struct-ot olvasható formában. Hibajelekkel tér vissza
 int writeLinesToTXTFile(Lines*, char*);
 
+char* trim (char*);
+
 #endif

@@ -1,8 +1,8 @@
 #ifndef CONSOLEIO_H
 #define CONSOLEIO_H
 
-/*#include "../model/Gift.h"
-#include "../model/GiftPack.h"*/
+#include "../model/Passenger.h"
+#include "../model/Lines.h"
 
 //Kiírja a saját dátum reprezentációt a képernyőre
 void dateOut(int);
@@ -11,20 +11,37 @@ void dateOut(int);
 int getConsoleWindowWidth();
 
 //Kiírja a köszöntő szöveget
-inline void printIntro();
+void printIntro();
 
 //A főmeü kirajzolása
-inline void printMainMenu();
+void printMainMenu();
 
-//Az első almenü kirajzolása
-inline void printSubMenu();
-
-//A menük logika
-char subMenu();
 char mainMenu();
 
+
+Passenger* getPassengerFromConsol();
+
+void clearInputBuffer();
+
+void getDate(char*);
+
+void getLineFromConsol(char*, char*);
+
+static int getLine (char*, char*, size_t);
+
+//Az első almenü kirajzolása
+void printSubMenu();
+
+//A menük logikája
+char subMenu();
+
+
 //Képernyő töröl
-inline void clearScrean();
+void clearScrean();
+
+void printLinesInTable(Lines*);
+
+
 
 /*
 void readFromConsole(char*, char, char*, int);

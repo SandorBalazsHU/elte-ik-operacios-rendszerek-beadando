@@ -1,13 +1,18 @@
-//time_t-hez szügséges
 #include <time.h>
-//strcpyhoz szügséges
 #include <string.h>
 #include <stdio.h>
 #include "ConsoleIO.h"
 #include <sys/ioctl.h>
 #include <unistd.h>
-/*#include "../model/Gift.h"
-#include "../model/GiftPack.h"*/
+#include <stdlib.h>
+#include <time.h>
+#include "../model/Lines.h"
+#include "../model/Line.h"
+#include "../model/Passenger.h"
+
+#define GETLINE_OK       0
+#define GETLINE_NO_INPUT 1
+#define GETLINE_TOO_LONG 2
 
 //Kiírja a saját dátum reprezentációt a képernyőre
 void dateOut(int date)
@@ -25,12 +30,14 @@ int getConsoleWindowWidth()
 }
 
 //Kiírja a köszöntő szöveget
-inline void printIntro()
+void printIntro()
 {
 	printf("\n");
 	int i, position = (int) (getConsoleWindowWidth()/2)-21;
-	char spacer[position];
-	char line[position]; 
+	char spacer[position+1];
+	char line[position+1];
+        spacer[position+1] = '\0';
+	line[position+1] = '\0'; 
 	for(i = 0; i < position; ++i)
 	{
 		spacer[i] = ' ';
@@ -42,7 +49,7 @@ inline void printIntro()
 }
 
 //A főmeü kirajzolása
-inline void printMainMenu()
+void printMainMenu()
 {
 	printf("          +-------------------+ \n");
 	printf("      \x1b[32m1.)\x1b[0m | Utazni szeretnék! | \n");
@@ -53,21 +60,6 @@ inline void printMainMenu()
 	printf("          +-------------------+ \n");
 	printf("      \x1b[32m3.)\x1b[0m | Kilépés           | \n");
 	printf("          +-------------------+ \n");
-	printf("      \x1b[32m+\x1b[0m Valassz funkciot: ");
-}
-
-//Az első almenü kirajzolása
-inline void printSubMenu()
-{
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m1.)\x1b[0m | Utak kezelése   | \n");
-	printf("          +-----------------+ \n");
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m2.)\x1b[0m | Utasok kezelése | \n");
-	printf("          +-----------------+ \n");
-	printf("          +-----------------+ \n");
-	printf("      \x1b[32m3.)\x1b[0m | Kilépés         | \n");
-	printf("          +-----------------+ \n");
 	printf("      \x1b[32m+\x1b[0m Valassz funkciot: ");
 }
 
@@ -83,6 +75,167 @@ char mainMenu()
 	return selectedMenuPoint;
 }
 
+//Képernyő töröl
+void clearScrean()
+{
+    //printf("\033[H\033[J");
+    int r = system("clear");
+}
+
+void printLinesInTable(Lines* lines)
+{
+    printf("\n");
+    int i, position = (int) getConsoleWindowWidth();
+    
+    char bigLine[(position/2)-21+1];
+    char spacer[(position/2)-21+1];
+    bigLine[(position/2)-21+1] = '\0';
+    spacer[(position/2)-21+1] = '\0';
+    for(i = 0; i < (position/2)-21; ++i)
+    {
+        bigLine[i] = '-';
+        spacer[i] = ' ';
+    }
+
+    printf("+%s\x1b[32m+-----------------------------------+\x1b[0m%s+\n",bigLine,bigLine);
+    printf("|%s\x1b[32m|      Jelenleg induló járataink    |\x1b[0m%s|\n",spacer,spacer);
+    printf("+%s\x1b[32m+-----------------------------------+\x1b[0m%s+\n",bigLine,bigLine);
+    
+    char spacer2[position-5+1];
+    spacer2[position-5+1] = '\0';
+    for(i = 0; i < (position-5); ++i)
+    {
+        spacer2[i] = ' ';
+    }
+    printf("|%s|\n",spacer2);
+    
+    char bigLine2[((position-7)/3)+1];
+    bigLine2[((position-7)/3)+1] = '\0';
+    for(i = 0; i < (position-7)/3; ++i)
+    {
+        bigLine2[i] = '-';
+    }
+    printf("+%s+%s+%s+\n",bigLine2,bigLine2,bigLine2);
+    
+   for(i = 0; i < lines->size; ++i)
+    {
+        Line* line = getLineFromLinesById(lines, i);
+        printf("| %d, %s, %s \n", i+1, line->destination, line->startTime);
+        printf("+%s+%s+%s+\n",bigLine2,bigLine2,bigLine2);
+    }
+}
+
+Passenger* getPassengerFromConsol()
+{
+    printf("      \x1b[32m+\x1b[0m Kerem toltse ki az alabbi urlapot az utazasra valo jelentkezeshez:\n");
+    clearInputBuffer();
+    char nev [256];
+    getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a teljes nevet: ", nev);
+    char tel [256];
+    getLineFromConsol("      \x1b[32m+\x1b[0m Kerem adja meg a telefonszamat: ",tel);
+    char date [256];
+    getDate(date);
+    printf("      \x1b[32m+\x1b[0m A datum: %s \n",date);
+    
+    return newPassenger(nev, tel, date);
+}
+
+void getLineFromConsol(char* text, char* str)
+{
+
+    char buff[256];
+
+    int rc = getLine (text , buff, sizeof(buff));
+    
+    if (rc == GETLINE_NO_INPUT) {
+        printf ("\n Nem adtál meg bemenetet! \n");
+        exit(1);
+    }
+
+    if (rc == GETLINE_TOO_LONG) {
+        printf ("Tul hosszu bemenet! \n");
+        exit(1);
+    }
+    strcpy(str, buff);
+}
+
+void clearInputBuffer()
+{
+    while(getchar() != '\n');
+}
+
+
+static int getLine (char *prmpt, char *buff, size_t sz) {
+    int ch, extra;
+
+    // Get line with buffer overrun protection.
+    if (prmpt != NULL) {
+        printf ("%s", prmpt);
+        fflush (stdout);
+    }
+
+    if (fgets (buff, sz, stdin) == NULL)
+        return GETLINE_NO_INPUT;
+
+    // If it was too long, there'll be no newline. In that case, we flush
+    // to end of line so that excess doesn't affect the next call.
+    if (buff[strlen(buff)-1] != '\n') {
+        extra = 0;
+        while (((ch = getchar()) != '\n') && (ch != EOF))
+            extra = 1;
+        return (extra == 1) ? GETLINE_TOO_LONG : GETLINE_OK;
+    }
+
+    // Otherwise remove newline and give string back to caller.
+    buff[strlen(buff)-1] = '\0';
+    return GETLINE_OK;
+}
+
+void getDate(char* date){
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char str[15];
+    sprintf(str, "%d", tm.tm_year + 1900);
+    strcpy(date, str);
+    strcat(date, "-");
+    
+    memset(str,0,strlen(str));
+    sprintf(str, "%d", tm.tm_mon + 1);
+    strcat(date, str);
+    strcat(date, "-");
+    
+    memset(str,0,strlen(str));
+    sprintf(str, "%d", tm.tm_mday);
+    strcat(date, str);
+    strcat(date, "-");
+    
+    memset(str,0,strlen(str));
+    sprintf(str, "%d", tm.tm_hour);
+    strcat(date, str);
+    strcat(date, ":");
+    
+    memset(str,0,strlen(str));
+    sprintf(str, "%d", tm.tm_min);
+    strcat(date, str);
+}
+
+
+
+//Az első almenü kirajzolása
+void printSubMenu()
+{
+	printf("          +-----------------+ \n");
+	printf("      \x1b[32m1.)\x1b[0m | Utak kezelése   | \n");
+	printf("          +-----------------+ \n");
+	printf("          +-----------------+ \n");
+	printf("      \x1b[32m2.)\x1b[0m | Utasok kezelése | \n");
+	printf("          +-----------------+ \n");
+	printf("          +-----------------+ \n");
+	printf("      \x1b[32m3.)\x1b[0m | Vissza          | \n");
+	printf("          +-----------------+ \n");
+	printf("      \x1b[32m+\x1b[0m Valassz funkciot: ");
+}
+
 //A menük logika
 char subMenu()
 {
@@ -94,17 +247,6 @@ char subMenu()
 	}
 	return selectedMenuPoint;
 }
-
-
-//Képernyő töröl
-inline void clearScrean()
-{
-	printf("\033[H\033[J");
-}
-
-
-
-
 
 /*
 void readFromConsole(char* text, char ender, char* label, int l)
@@ -121,7 +263,7 @@ void readFromConsole(char* text, char ender, char* label, int l)
 			++i;
 		}
 	}
-	text[i] = '\0';
+	text[i] = '\0';*
 }
 	
 void printRecord(Gift* gift)

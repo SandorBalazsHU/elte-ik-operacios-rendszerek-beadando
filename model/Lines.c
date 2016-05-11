@@ -7,12 +7,12 @@
 //Új üres lista
 struct Lines* newLines()
 {
-	struct Lines* this = malloc(sizeof(struct Lines));
-	this -> size = 0;
-	this -> _realSize = defaultArraySize;
-	Line**  mallocLineArray = malloc(this -> _realSize * sizeof(Line*));
-	this -> lineArray = mallocLineArray;
-	return this;
+	struct Lines* _this = malloc(sizeof(struct Lines));
+	_this -> size = 0;
+	_this -> _realSize = defaultArraySize;
+	Line**  mallocLineArray = malloc(_this -> _realSize * sizeof(Line*));
+	_this -> lineArray = mallocLineArray;
+	return _this;
 }
 
 
@@ -106,7 +106,7 @@ int deleteLineFromLines(Lines* lines, Line* line)
 }
 
 //Célállomás szerinti keresés
-struct Line* getLineFromLines(Lines* lines, char* dest)
+struct Line* getLineFromLinesByDestination(Lines* lines, char* dest)
 {
 	int i;
 	for(i = 0; i < lines->size; ++i)
@@ -114,6 +114,18 @@ struct Line* getLineFromLines(Lines* lines, char* dest)
 		if((strcmp(lines->lineArray[i]->destination, dest) == 0 )) return(lines->lineArray[i]);
 	}
 	return NULL;
+}
+
+struct Line* getLineFromLinesById(Lines* lines, int id)
+{
+    if(id<lines->size)
+    {
+        return lines->lineArray[id];
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 

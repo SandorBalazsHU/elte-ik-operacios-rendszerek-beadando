@@ -1,12 +1,14 @@
-//mallochoz szügséges
+
 #include <stdlib.h>
 #include <string.h>
 #include "Passenger.h"
 
 //új utas létrehozása
-struct Passenger* newPassenger(Passenger* pas, char* inName, char* inPhoneNum, int inDate)
+struct Passenger* newPassenger(char* inName, char* inPhoneNum, char* inDate)
 {
-	strcpy(pas->name, inName);
-	strcpy(pas->phoneNum, inPhoneNum);
-	pas->date = inDate;
+    Passenger* newPass = (struct Passenger*) malloc(sizeof (struct Passenger));
+    strcpy(newPass->name, inName);
+    strcpy(newPass->phoneNum, inPhoneNum);
+    strcpy(newPass->date, inDate);
+    return newPass;
 }

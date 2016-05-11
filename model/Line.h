@@ -12,7 +12,7 @@
 |     | char* destination  |     |
 |     +--------------------+     |
 |     +--------------------+     |
-|     | int startTime      |     |
+|     | char* startTime    |     |
 |     +--------------------+     |
 |     +--------------------+     |
 |     | int size           |     |
@@ -41,7 +41,7 @@ typedef struct Line
 	//Uticél
 	char destination[100];
 	//Indulás ideje. Formátum: YYYYMMDDhhmm
-	int startTime;
+        char startTime[20];
 	//Felvett utasok száma
 	int size;
 	//A tároló tömb valós mérete
@@ -54,7 +54,7 @@ typedef struct Line
 static const int _lineDefaultArraySize = 5;
 
 //Új üres járat létrehozásához
-struct Line* newLine();
+struct Line* newLine(char*, char*);
 
 //Utas hozzáadását teszi lehetőve egy járathoz
 /*	Ha az utaslistát reprezentáló tömb betelt, akkor dupla méretűt deklarálunk, átmásoljuk az adatokat és a régit töröljük a C++ Vector mintájára.*/

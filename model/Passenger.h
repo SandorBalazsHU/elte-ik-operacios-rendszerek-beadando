@@ -10,22 +10,15 @@
 |        Passenger       |
 |                        |
 | +--------------------+ |
-| |       name[]       | |
-| | +----------------+ | |
-| | |      Char      | | |
-| | +----------------+ | |
-| | +----------------+ | |
-| | |      Char      | | |
-| | +----------------+ | |
-| |         ...        | |
+| |     char name[]    | |
 | +--------------------+ |
 |                        |
 | +--------------------+ |
-| |    int phoneNum    | |
+| |   char phoneNum[]  | |
 | +--------------------+ |
 |                        |
 | +--------------------+ |
-| |      int date      | |
+| |    char date[]     | |
 | +--------------------+ |
 |                        |
 +------------------------+
@@ -35,13 +28,13 @@ typedef struct Passenger
 	//név
 	char name[30];
 	//telefonszám
-	char phoneNum[12];
+	char phoneNum[30];
 	//Jelentkezés ideje. Formátum: YYYYMMDDhhmm
-	int date;
+	char date[20];
 } Passenger;
 
 //új utas létrehozása
-struct Passenger* newPassenger(Passenger*, char*, char*, int);
+struct Passenger* newPassenger(char*, char*, char*);
 
 /*/Heapra másol stringeket.?????????????????????????????????????????????????????????
 char* charCopyByValueToHeap(char*);*/
